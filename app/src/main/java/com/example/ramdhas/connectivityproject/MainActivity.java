@@ -15,21 +15,22 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "CheckNetworkStatus";
+    private static final String LOG_TAG = "CheckNetworkStatus";// private initiate values
     private NetworkChangeReceiver receiver;
     private boolean isConnected = false;
     private TextView networkStatus;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState) //create a method to show the instance state to main page
+    {
+        super.onCreate(savedInstanceState); // call to super class oncreate funciton for getdelegate some state
+        setContentView(R.layout.activity_main); // show the content in main view
 
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        receiver = new NetworkChangeReceiver();
-        registerReceiver(receiver, filter);
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);// initialized object name for intenfilter
+        receiver = new NetworkChangeReceiver(); // initialized the object
+        registerReceiver(receiver, filter); // send the result to registerReceiver
 
-        networkStatus = (TextView) findViewById(R.id.networkStatus);
+        networkStatus = (TextView) findViewById(R.id.networkStatus);// send the text result to acitivi_main.xml
     }
 
     @Override
@@ -40,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()// if connection not available in this device it will be throw the signal in network status
+    {
         Log.v(LOG_TAG, "onDestory");
         super.onDestroy();
 
@@ -48,31 +50,39 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public class NetworkChangeReceiver extends BroadcastReceiver {
+    public class NetworkChangeReceiver extends BroadcastReceiver
+    {
 
         @Override
-        public void onReceive(final Context context, final Intent intent) {
+        public void onReceive(final Context context, final Intent intent)
+        {
 
             Log.v(LOG_TAG, "Receieved notification about network status");
-            isNetworkAvailable(context);
+            isNetworkAvailable(context);// if connection is availabel in the device it will be throw the signal
 
         }
 
-        private boolean isNetworkAvailable(Context context) {
-            ConnectivityManager connectivity = (ConnectivityManager)
-                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (connectivity != null) {
+        private boolean isNetworkAvailable(Context context)
+        {
+            ConnectivityManager connectivity = (ConnectivityManager)//create a obj name from connectivity manager
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);// collect system context from connectivity service
+            if (connectivity != null) //
+            {
                 NetworkInfo[] info = connectivity.getAllNetworkInfo();
-                if (info != null) {
-                    for (int i = 0; i < info.length; i++) {
-                        if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                            if(!isConnected){
-                                Log.v(LOG_TAG, "Now you are connected to Internet!");
-                                networkStatus.setText("Now you are connected to Internet!");
-                                isConnected = true;
-                                //do your processing here ---
-                                //if you need to post any data to the server or get status
-                                //update from the server
+                if (info != null)// network info is not null
+                {
+                    for (int i = 0; i < info.length; i++)
+                    {
+                        if (info[i].getState() == NetworkInfo.State.CONNECTED) //get the state from info
+                        {
+                            if(!isConnected) //not equal to isconnected is false
+                            {
+                            Log.v(LOG_TAG, "Now you are connected to Internet!");
+                            networkStatus.setText("Now you are connected to Internet!");
+//                                isConnected = true;
+                            //do your processing here ---
+                            //if you need to post any data to the server or get status
+                            //update from the server
                             }
                             return true;
                         }
